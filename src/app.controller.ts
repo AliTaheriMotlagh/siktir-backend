@@ -44,7 +44,7 @@ export class AppController {
       visitCount: 0,
       userId: 'b80057ec-1316-4937-8a67-62aa2bc669a1',
       createdAt: new Date(),
-      id: null,
+      id: '',
     };
     return this.dokmeService.createDokme(dto);
   }

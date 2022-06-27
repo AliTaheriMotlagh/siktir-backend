@@ -31,7 +31,7 @@ export class DokmeService {
     });
   }
 
-  async createDokme(data: any): Promise<Dokme> {
+  async createDokme(data: Dokme): Promise<Dokme> {
     return this.prisma.dokme.create({
       data,
     });
