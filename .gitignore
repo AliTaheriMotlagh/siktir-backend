@@ -1,4 +1,7 @@
-.env 
+# environment variable file
+.env.prod
+.env.test
+.env
 
 # compiled output
 /dist
