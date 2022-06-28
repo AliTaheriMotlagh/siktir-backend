@@ -25,14 +25,12 @@ model Dokme {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   userId      String
-  link        String
+  url         String
   title       String
   description String
   expireDate  DateTime
   visitCount  Int
   siktirCount Int
-  isAnonymous Boolean
-  url         String
   user        User     @relation(fields: [userId], references: [id])
   Siktir      Siktir[]
   Visit       Visit[]
