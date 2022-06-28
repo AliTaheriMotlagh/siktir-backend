@@ -11,48 +11,22 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  createdAt     DateTime @default(now())
-  fingerPrint   String
-  Dokme         Dokme[]
-  Siktir        Siktir[]
-  Visit         Visit[]
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  fingerPrint String
+  Dokmes      Dokme[]
 
   @@map("Users")
 }
 
 model Dokme {
-  id          String   @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  userId      String
   url         String
   title       String
   description String
-  expireDate  DateTime
-  visitCount  Int
-  siktirCount Int
-  user        User     @relation(fields: [userId], references: [id])
-  Siktir      Siktir[]
-  Visit       Visit[]
 
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?
   @@map("Dokmes")
-}
-
-model Siktir {
-  createdAt DateTime @default(now())
-  userId    String
-  dokmeId   String
-  dokme     Dokme    @relation(fields: [dokmeId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@id([userId, dokmeId])
-}
-
-model Visit {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  userId    String
-  dokmeId   String
-  dokme     Dokme    @relation(fields: [dokmeId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
 }
