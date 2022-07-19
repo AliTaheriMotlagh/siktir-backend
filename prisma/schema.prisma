@@ -11,10 +11,10 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  createdAt      DateTime @default(now())
-  fingerPrint  String
-  Dokmes         Dokme[]
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  fingerPrint String   @unique
+  Dokmes      Dokme[]
 
   @@map("Users")
 }

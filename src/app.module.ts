@@ -3,9 +3,16 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DokmeModule } from './dokme/dokme.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, DokmeModule],
+  imports: [
+    PrismaModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    UserModule,
+    DokmeModule,
+  ],
   controllers: [],
   providers: [],
 })
