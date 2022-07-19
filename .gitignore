@@ -3,6 +3,9 @@
 .env.test
 .env
 
+# db 
+/prisma/db
+
 # compiled output
 /dist
 /node_modules

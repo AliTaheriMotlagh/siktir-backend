@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -22,9 +22,11 @@ model User {
 model Dokme {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
+  expiredAt   DateTime
   url         String
   title       String
   description String
+  siktirCount BigInt
 
   User   User? @relation(fields: [userId], references: [id])
   userId Int?
