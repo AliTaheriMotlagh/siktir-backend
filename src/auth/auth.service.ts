@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDto } from './dto';
+import { AuthDto, TokenDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async Register(dto: AuthDto) {
+  async Register(dto: AuthDto): Promise<TokenDto> {
     try {
       const user = await this.prisma.user.findUnique({
         where: { fingerPrint: dto.fingerPrint },
@@ -35,19 +35,22 @@ export class AuthService {
     }
   }
 
+  async SignToken(id: string): Promise<TokenDto> {
+    const payload = { sub: id };
+    const token = this.jwt.sign(payload, {
+      expiresIn: '24h',
+      secret: this.config.get('JWT_SECRET'),
+    });
+    const dto: TokenDto = {
+      access_token: token,
+    };
+    return dto;
+  }
+
   async FindUser(userId: string) {
     return await this.prisma.user.findFirst({
       where: { id: userId },
       select: { id: true },
     });
-  }
-
-  async SignToken(id: string) {
-    const payload = { sub: id };
-    const access_token = this.jwt.sign(payload, {
-      expiresIn: '24h',
-      secret: this.config.get('JWT_SECRET'),
-    });
-    return { access_token };
   }
 }
