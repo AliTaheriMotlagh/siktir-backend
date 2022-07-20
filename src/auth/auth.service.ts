@@ -50,7 +50,6 @@ export class AuthService {
   async FindUser(userId: string) {
     return await this.prisma.user.findFirst({
       where: { id: userId },
-      select: { id: true },
     });
   }
 }

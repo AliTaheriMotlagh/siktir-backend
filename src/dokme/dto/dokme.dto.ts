@@ -1,13 +1,13 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class AuthDto {
+export class DokmeDto {
   @IsString()
   @IsNotEmpty()
-  fingerPrint: string;
-}
-
-export class TokenDto {
+  url: string;
   @IsString()
   @IsNotEmpty()
-  access_token: string;
+  title: string;
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 }

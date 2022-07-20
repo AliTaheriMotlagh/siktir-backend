@@ -20,13 +20,13 @@ model User {
 }
 
 model Dokme {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   expiredAt   DateTime
   url         String
   title       String
   description String
-  siktirCount BigInt
+  siktirCount Int
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
