@@ -10,16 +10,20 @@ export class SiktirService {
       where: { dokmeId: dto.dokmeId, userId: dto.userId },
     });
     if (siktir) {
-      throw new NotAcceptableException('you already sikir this dokme');
+      await this.prisma.siktir.delete({ where: { id: siktir.id } });
+      return await this.prisma.dokme.update({
+        where: { id: dto.dokmeId },
+        data: { siktirCount: { decrement: 1 } },
+      });
     }
 
     await this.prisma.siktir.create({
       data: { dokmeId: dto.dokmeId, userId: dto.userId },
     });
-
     return await this.prisma.dokme.update({
       where: { id: dto.dokmeId },
       data: { siktirCount: { increment: 1 } },
     });
   }
+  incrimentSiktir;
 }
