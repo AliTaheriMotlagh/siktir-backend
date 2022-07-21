@@ -13,30 +13,32 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async Register(dto: AuthDto): Promise<TokenDto> {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: { fingerPrint: dto.fingerPrint },
-        select: { id: true },
-      });
-      if (user) {
-        return this.SignToken(user.id);
-      }
-
-      const newUser = await this.prisma.user.create({
-        data: {
-          fingerPrint: dto.fingerPrint,
-        },
-        select: { id: true },
-      });
-      return this.SignToken(newUser.id);
-    } catch (error) {
-      console.log(error);
-    }
+  async ValidateUser(userId: string) {
+    return await this.prisma.user.findFirst({
+      where: { id: userId },
+    });
   }
 
-  async SignToken(id: string): Promise<TokenDto> {
-    const payload = { sub: id };
+  async Register(dto: AuthDto): Promise<TokenDto> {
+    const user = await this.prisma.user.findFirst({
+      where: { fingerPrint: dto.fingerPrint },
+      select: { id: true },
+    });
+    if (user) {
+      return this.signToken(user.id);
+    }
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        fingerPrint: dto.fingerPrint,
+      },
+      select: { id: true },
+    });
+    return this.signToken(newUser.id);
+  }
+
+  private async signToken(userId: string): Promise<TokenDto> {
+    const payload = { sub: userId };
     const token = this.jwt.sign(payload, {
       expiresIn: '24h',
       secret: this.config.get('JWT_SECRET'),
@@ -45,11 +47,5 @@ export class AuthService {
       access_token: token,
     };
     return dto;
-  }
-
-  async FindUser(userId: string) {
-    return await this.prisma.user.findFirst({
-      where: { id: userId },
-    });
   }
 }
