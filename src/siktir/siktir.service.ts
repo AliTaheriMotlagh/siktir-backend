@@ -9,7 +9,6 @@ export class SiktirService {
     const siktir = await this.prisma.siktir.findFirst({
       where: { dokmeId: dto.dokmeId, userId: dto.userId },
     });
-
     if (siktir) {
       throw new NotAcceptableException('you already sikir this dokme');
     }

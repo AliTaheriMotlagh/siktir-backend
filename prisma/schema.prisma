@@ -13,7 +13,7 @@ datasource db {
 model User {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
-  fingerPrint String   @unique
+  fingerPrint String   
   Dokmes      Dokme[]
   Siktir      Siktir[]
 

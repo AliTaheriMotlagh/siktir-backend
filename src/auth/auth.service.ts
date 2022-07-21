@@ -15,7 +15,7 @@ export class AuthService {
 
   async Register(dto: AuthDto): Promise<TokenDto> {
     try {
-      const user = await this.prisma.user.findUnique({
+      const user = await this.prisma.user.findFirst({
         where: { fingerPrint: dto.fingerPrint },
         select: { id: true },
       });
