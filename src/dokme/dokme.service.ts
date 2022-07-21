@@ -6,22 +6,32 @@ import { DokmeDto } from './dto';
 export class DokmeService {
   constructor(private prisma: PrismaService) {}
   async CreateDokme(dto: DokmeDto, userId: string) {
-    const tody = new Date();
-    tody.setHours(24, 0, 0, 0);
     return this.prisma.dokme.create({
       data: {
         url: dto.url,
         title: dto.title,
         description: dto.description,
-        expiredAt: tody.toISOString(),
+        expiredAt: this.getTomorrowDate(),
         siktirCount: 0,
         userId: userId,
       },
     });
   }
-  async GetAllDokmes() {
-    const tody = new Date();
 
-    return this.prisma.dokme.findMany();
+  getTomorrowDate(): string {
+    let tody = new Date();
+    return new Date(tody.setUTCHours(24, 0, 0, 0)).toISOString();
+  }
+
+  getTodayDate(): string {
+    let tody = new Date();
+    return new Date(tody.setUTCHours(0, 0, 0, 0)).toISOString();
+  }
+
+  async GetAllDokmes() {
+    return this.prisma.dokme.findMany({
+      where: { expiredAt: { gt: this.getTodayDate() } },
+      orderBy: { updateAt: 'desc' },
+    });
   }
 }
