@@ -1,4 +1,4 @@
-import { NotAcceptableException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SiktirDto } from './dto';
 
@@ -10,11 +10,7 @@ export class SiktirService {
       where: { dokmeId: dto.dokmeId, userId: dto.userId },
     });
     if (siktir) {
-      await this.prisma.siktir.delete({ where: { id: siktir.id } });
-      return await this.prisma.dokme.update({
-        where: { id: dto.dokmeId },
-        data: { siktirCount: { decrement: 1 } },
-      });
+      throw new HttpException('you alredy siktir this dokme', 406);
     }
 
     await this.prisma.siktir.create({
@@ -25,5 +21,10 @@ export class SiktirService {
       data: { siktirCount: { increment: 1 } },
     });
   }
-  incrimentSiktir;
+  async GetMySiktir(userId: string) {
+    return await this.prisma.siktir.findMany({
+      where: { userId },
+      select: { dokmeId: true },
+    });
+  }
 }
