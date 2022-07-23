@@ -20,12 +20,12 @@ export class DokmeService {
 
   getTomorrowDate(): string {
     const tody = new Date();
-    return new Date(tody.setUTCHours(24, 0, 0, 0)).toISOString();
+    return new Date(tody.setUTCHours(19, 30, 0, 0)).toISOString();
   }
 
   getTodayDate(): string {
     const tody = new Date();
-    return new Date(tody.setUTCHours(0, 0, 0, 0)).toISOString();
+    return new Date(tody.setUTCHours(19, 30, 0, 0)).toISOString();
   }
 
   async GetAllDokmes() {
