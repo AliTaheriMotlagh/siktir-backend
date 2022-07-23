@@ -2,9 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DokmeDto } from './dto';
 
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
+
 @Injectable()
 export class DokmeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {
+    dayjs.extend(utc);
+  }
   async CreateDokme(dto: DokmeDto, userId: string) {
     return this.prisma.dokme.create({
       data: {
@@ -19,17 +24,20 @@ export class DokmeService {
   }
 
   getTomorrowDate(): string {
-    let tody = new Date();
-    const mideNighitInIran = new Date().setUTCHours(19, 30, 0, 0);
-    if (tody.getUTCDate() > mideNighitInIran) {
-      tody = new Date(tody.setUTCDate(tody.getUTCDate() + 1));
+    let tody = dayjs.utc();
+    const mideNighitInIran = dayjs
+      .utc()
+      .set('hour', 19)
+      .set('minute', 30)
+      .set('second', 0);
+    if (tody > mideNighitInIran) {
+      tody = tody.add(1, 'day');
     }
-    return new Date(tody.setUTCHours(19, 30, 0, 0)).toISOString();
+    return tody.set('hour', 19).set('minute', 30).set('second', 0).format();
   }
 
   getTodayDate(): string {
-    const tody = new Date();
-    return tody.toISOString();
+    return dayjs.utc().format();
   }
 
   async GetAllDokmes() {
