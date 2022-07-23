@@ -19,10 +19,10 @@ export class DokmeService {
   }
 
   getTomorrowDate(): string {
-    const tody = new Date();
+    let tody = new Date();
     const mideNighitInIran = new Date().setUTCHours(19, 30, 0, 0);
     if (tody.getUTCDate() > mideNighitInIran) {
-      tody.setDate(tody.getDate() + 1);
+      tody = new Date(tody.setUTCDate(tody.getUTCDate() + 1));
     }
     return new Date(tody.setUTCHours(19, 30, 0, 0)).toISOString();
   }
