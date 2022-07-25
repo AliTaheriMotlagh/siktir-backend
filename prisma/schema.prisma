@@ -21,15 +21,20 @@ model User {
 }
 
 model Dokme {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updateAt    DateTime @updatedAt
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
 
-  expiredAt   DateTime 
+  expiredAt   DateTime
   url         String
   title       String
   description String
   siktirCount Int
+
+  urlTitle       String
+  urlDescription String
+  urlImg         String
+  urlIcon        String
 
   User   User?    @relation(fields: [userId], references: [id])
   userId String?

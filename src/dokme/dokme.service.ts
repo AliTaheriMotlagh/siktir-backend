@@ -15,7 +15,7 @@ export class DokmeService {
     dayjs.extend(utc);
   }
   async CreateDokme(dto: DokmeDto, userId: string) {
-    this.urlMetadataService.getData(dto.url);
+    const urlMetadata = await this.urlMetadataService.getData(dto.url);
     return this.prisma.dokme.create({
       data: {
         url: dto.url,
@@ -24,6 +24,10 @@ export class DokmeService {
         expiredAt: this.getTomorrowDate(),
         siktirCount: 0,
         userId: userId,
+        urlTitle: urlMetadata.title,
+        urlDescription: urlMetadata.description,
+        urlImg: urlMetadata.img,
+        urlIcon: urlMetadata.icon,
       },
     });
   }
