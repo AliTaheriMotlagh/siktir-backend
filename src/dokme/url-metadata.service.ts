@@ -8,13 +8,22 @@ export class UrlMetadataService {
     const { status, data } = await mql(url);
     if (status) {
       const res: UrlMetadataDto = {
-        description: data.description,
-        icon: data.logo.url,
-        img: data.image.url,
-        title: data.title,
-        url: data.url,
+        description: this.getNullStringifNull(data.description),
+        icon: this.getNullStringifNull(data.logo),
+        img: this.getNullStringifNull(data.image),
+        title: this.getNullStringifNull(data.title),
+        url: this.getNullStringifNull(data.url),
       };
       return res;
     }
+  }
+  getNullStringifNull(data: any) {
+    if (data?.url) {
+      return data.url;
+    }
+    if (data) {
+      return data;
+    }
+    return '';
   }
 }
