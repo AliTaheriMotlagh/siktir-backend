@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DokmeDto } from './dto';
 
@@ -50,9 +50,19 @@ export class DokmeService {
   }
 
   async GetAllDokmes() {
-    return this.prisma.dokme.findMany({
+    return await this.prisma.dokme.findMany({
       where: { expiredAt: { gt: this.getTodayDate() } },
       orderBy: { updateAt: 'desc' },
     });
+  }
+
+  async GetDokmeById(dokmeId: string) {
+    const dokme = await this.prisma.dokme.findUnique({
+      where: { id: dokmeId },
+    });
+    if (!dokme) {
+      throw new NotFoundException();
+    }
+    return dokme;
   }
 }

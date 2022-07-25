@@ -21,10 +21,20 @@ export class SiktirService {
       data: { siktirCount: { increment: 1 } },
     });
   }
-  async GetMySiktir(userId: string) {
+  async GetUserSiktir(userId: string) {
     return await this.prisma.siktir.findMany({
       where: { userId },
       select: { dokmeId: true },
     });
+  }
+
+  async isDokmeSiktirByUser(userId: string, dokmeId: string) {
+    const siktir = await this.prisma.siktir.findFirst({
+      where: { userId, dokmeId },
+    });
+    if (!siktir) {
+      return false;
+    }
+    return true;
   }
 }

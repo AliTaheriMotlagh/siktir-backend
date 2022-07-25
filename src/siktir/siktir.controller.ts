@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { FireSiktirDto, SiktirDto } from './dto';
@@ -14,7 +14,12 @@ export class SiktirController {
   }
 
   @Get('my')
-  GetMySiktir(@GetUser('id') userId) {
-    return this.siktirService.GetMySiktir(userId);
+  GetUserSiktir(@GetUser('id') userId) {
+    return this.siktirService.GetUserSiktir(userId);
+  }
+
+  @Get(':dokmeId')
+  isDokmeSiktirByUser(@GetUser('id') userId, @Param() params) {
+    return this.siktirService.isDokmeSiktirByUser(userId, params.dokmeId);
   }
 }
