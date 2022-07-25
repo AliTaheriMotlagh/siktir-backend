@@ -24,6 +24,7 @@
     "db:generate": "prisma generate"
   },
   "dependencies": {
+    "@microlink/mql": "^0.10.28",
     "@nestjs/common": "^9.0.4",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.4",

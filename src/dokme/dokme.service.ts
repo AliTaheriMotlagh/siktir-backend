@@ -4,13 +4,18 @@ import { DokmeDto } from './dto';
 
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
+import { UrlMetadataService } from './url-metadata.service';
 
 @Injectable()
 export class DokmeService {
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private urlMetadataService: UrlMetadataService,
+  ) {
     dayjs.extend(utc);
   }
   async CreateDokme(dto: DokmeDto, userId: string) {
+    this.urlMetadataService.getData(dto.url);
     return this.prisma.dokme.create({
       data: {
         url: dto.url,
