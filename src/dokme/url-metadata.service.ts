@@ -15,7 +15,8 @@ export class UrlMetadataService {
       const urlMetadata: UrlMetadataDto = {
         description:
           $('meta[property="og:description"]').attr('content') ||
-          $('meta[name="description"]').attr('content'),
+          $('meta[name="description"]').attr('content') ||
+          '',
         icon:
           $('link[rel="icon"]').attr('href') ||
           $('link[rel="shortcut icon"]').attr('href') ||
@@ -27,8 +28,9 @@ export class UrlMetadataService {
         title:
           $('meta[property="og:title"]').attr('content') ||
           $('title').text() ||
-          $('meta[name="title"]').attr('content'),
-        url: $('meta[property="og:url"]').attr('content'),
+          $('meta[name="title"]').attr('content') ||
+          '',
+        url: $('meta[property="og:url"]').attr('content') || '',
       };
       return urlMetadata;
     } catch (error) {
