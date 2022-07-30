@@ -1,33 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import * as mql from '@microlink/mql';
+import * as cheerio from 'cheerio';
 import { UrlMetadataDto } from './dto';
+import { HttpService } from '@nestjs/axios';
+import { data } from 'cheerio/lib/api/attributes';
+import { map } from 'rxjs';
 
 @Injectable()
 export class UrlMetadataService {
+  constructor(private readonly httpService: HttpService) {}
   async getData(url: string) {
-    const { status, data } = await mql(url);
-    if (status) {
-      const res: UrlMetadataDto = {
-        description: this.getNullStringifNull(data.description),
-        icon: this.getNullStringifNull(data.logo),
-        img: this.getNullStringifNull(data.image),
-        title: this.getNullStringifNull(data.title),
-        url: this.getNullStringifNull(data.url),
+    try {
+      const htmlRes = await this.httpService.get(url).toPromise();
+      const $ = cheerio.load(htmlRes.data);
+      const urlMetadata: UrlMetadataDto = {
+        description:
+          $('meta[property="og:description"]').attr('content') ||
+          $('meta[name="description"]').attr('content'),
+        icon:
+          $('link[rel="icon"]').attr('href') ||
+          $('link[rel="shortcut icon"]').attr('href') ||
+          '',
+        img:
+          $('meta[property="og:image"]').attr('content') ||
+          $('meta[property="og:image:url"]').attr('content') ||
+          '',
+        title:
+          $('meta[property="og:title"]').attr('content') ||
+          $('title').text() ||
+          $('meta[name="title"]').attr('content'),
+        url: $('meta[property="og:url"]').attr('content'),
       };
-      return res;
+      return urlMetadata;
+    } catch (error) {
+      const urlMetadata: UrlMetadataDto = {
+        description: '',
+        icon: '',
+        img: '',
+        title: '',
+        url: '',
+      };
+      return urlMetadata;
     }
-  }
-  getNullStringifNull(data: any) {
-    if (data?.url) {
-      if (data.url.indexOf('https://') === 0) {
-        return data.url;
-      } else {
-        return '';
-      }
-    }
-    if (data) {
-      return data;
-    }
-    return '';
   }
 }
