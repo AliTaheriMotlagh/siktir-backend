@@ -57,8 +57,8 @@ export class DokmeService {
   }
 
   async GetDokmeById(dokmeId: string) {
-    const dokme = await this.prisma.dokme.findUnique({
-      where: { id: dokmeId },
+    const dokme = await this.prisma.dokme.findFirst({
+      where: { id: dokmeId, expiredAt: { gt: this.getTodayDate() } },
     });
     if (!dokme) {
       throw new NotFoundException();
