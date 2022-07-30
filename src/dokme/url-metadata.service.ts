@@ -19,7 +19,11 @@ export class UrlMetadataService {
   }
   getNullStringifNull(data: any) {
     if (data?.url) {
-      return data.url;
+      if (data.url.indexOf('https://') === 0) {
+        return data.url;
+      } else {
+        return '';
+      }
     }
     if (data) {
       return data;
