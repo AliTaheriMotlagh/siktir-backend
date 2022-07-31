@@ -32,6 +32,12 @@ export class UrlMetadataService {
           '',
         url: $('meta[property="og:url"]').attr('content') || '',
       };
+      if (urlMetadata.icon.indexOf('http') !== 0) {
+        urlMetadata.icon = `${url}${urlMetadata.icon}`;
+      }
+      if (urlMetadata.img.indexOf('http') !== 0) {
+        urlMetadata.img = `${url}${urlMetadata.img}`;
+      }
       return urlMetadata;
     } catch (error) {
       const urlMetadata: UrlMetadataDto = {
