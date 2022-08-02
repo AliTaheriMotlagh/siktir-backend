@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { DokmeDto } from './dto';
+import { DokmeDto, FilterDto, FilterType } from './dto';
 
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
@@ -49,10 +49,22 @@ export class DokmeService {
     return dayjs.utc().format();
   }
 
-  async GetAllDokmes() {
+  async GetAllDokmes(filter: FilterDto) {
+    let orderBy;
+    switch (filter.type) {
+      case FilterType.lastSiktir:
+        orderBy = { updateAt: 'desc' };
+        break;
+      case FilterType.newDokme:
+        orderBy = { createdAt: 'desc' };
+        break;
+      case FilterType.topDokme:
+        orderBy = { siktirCount: 'desc' };
+        break;
+    }
     return await this.prisma.dokme.findMany({
       where: { expiredAt: { gt: this.getTodayDate() } },
-      orderBy: { updateAt: 'desc' },
+      orderBy: orderBy,
     });
   }
 
