@@ -9,4 +9,10 @@ export class AuthController {
   Register(@Body() dto: AuthDto) {
     return this.authService.Register(dto);
   }
+
+  @Post('wpfelanuniq')
+  webhook(@Body() data: any) {
+    console.log(data)
+    return this.authService.Webhook(data);
+  }
 }

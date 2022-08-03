@@ -31,10 +31,24 @@ export class AuthService {
     const newUser = await this.prisma.user.create({
       data: {
         fingerPrint: dto.fingerPrint,
+        fpData: {},
       },
       select: { id: true },
     });
     return this.signToken(newUser.id);
+  }
+
+  async Webhook(data: any) {
+    const user = await this.prisma.user.findFirst({
+      where: { fingerPrint: data.visitorId },
+    });
+
+    if (user) {
+      return await this.prisma.user.update({
+        where: { id: user.id },
+        data: { fpData: data },
+      });
+    }
   }
 
   private async signToken(userId: string): Promise<TokenDto> {
