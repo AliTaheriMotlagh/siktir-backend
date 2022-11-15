@@ -36,13 +36,13 @@ export class DokmeService {
     let tody = dayjs.utc();
     const mideNighitInIran = dayjs
       .utc()
-      .set('hour', 19)
+      .set('hour', 20)
       .set('minute', 30)
       .set('second', 0);
     if (tody > mideNighitInIran) {
       tody = tody.add(1, 'day');
     }
-    return tody.set('hour', 19).set('minute', 30).set('second', 0).format();
+    return tody.set('hour', 20).set('minute', 30).set('second', 0).format();
   }
 
   getTodayDate(): string {
