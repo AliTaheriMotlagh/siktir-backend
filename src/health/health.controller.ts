@@ -18,7 +18,6 @@ export class HealthController {
   @HealthCheck()
   check() {
     return this.health.check([
-      () => this.http.pingCheck('website', 'https://siktir.fun'),
       () => this.db.isHealthy('database')
     ]);
   }
