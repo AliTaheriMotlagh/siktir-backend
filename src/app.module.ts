@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { SiktirModule } from './siktir/siktir.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { join } from 'path';
     AuthModule,
     DokmeModule,
     SiktirModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],
