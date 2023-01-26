@@ -38,19 +38,6 @@ export class AuthService {
     return this.signToken(newUser.id);
   }
 
-  async Webhook(data: any) {
-    const user = await this.prisma.user.findFirst({
-      where: { fingerPrint: data.visitorId },
-    });
-
-    if (user) {
-      return await this.prisma.user.update({
-        where: { id: user.id },
-        data: { fpData: data },
-      });
-    }
-  }
-
   private async signToken(userId: string): Promise<TokenDto> {
     const payload = { sub: userId };
     const token = this.jwt.sign(payload, {
