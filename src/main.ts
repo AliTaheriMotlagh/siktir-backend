@@ -10,7 +10,7 @@ async function bootstrap() {
 
   // const httpAdapter = app.get(HttpAdapterHost);
   // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
-
+  await app.enableShutdownHooks();
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
